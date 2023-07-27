@@ -34,9 +34,9 @@ def about():
 def updatelogin():
     form = UpdateLogin()
     if form.validate_on_submit():
-        flash(f'Account created for {form.username.data}!', 'success')
+        flash(f'Account updated for {form.username.data}!', 'success')
         return redirect(url_for('home'))
-    return render_template('updatelogin.html', title='Register', form=form)
+    return render_template('updatelogin.html', title='Update Login', form=form)
 
 
 @app.route("/login", methods=['GET', 'POST'])
