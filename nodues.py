@@ -1,8 +1,31 @@
 from flask import Flask, render_template, url_for, flash, redirect
+from flask_sqlalchemy import SQLAlchemy
 from forms import UpdateLogin, LoginForm
-app = Flask(__name__)
 
+app = Flask(__name__)
 app.config['SECRET_KEY'] = 'ea77a2c1cff84971c247e008b1a749fd'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+db = SQLAlchemy(app)
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), unique=True, nullable=False)
+    enrollment_no = db.Column(db.String(10), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
+    password = db.Column(db.String(60), nullable=False)
+    course = db.Column(db.String(20), nullable=False)
+    batch = db.Column(db.String(4), nullable=False)
+    address = db.Column(db.Text)
+    hostel_fees = db.Column(db.String(20), unique=True, nullable=False)
+    tuition_fees = db.Column(db.String(20), unique=True, nullable=False)
+    other_fees = db.Column(db.String(20), unique=True, nullable=False)
+    library = db.Column(db.String(20), unique=True, nullable=False)
+
+
+    def __repr__(self):
+        return f"User('{self.username}', '{self.email}', '{self.image_file}', '{self.course}', '{self.batch}', '{self.address}')"
+
 
 due_records = [
     {
