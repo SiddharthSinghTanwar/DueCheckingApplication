@@ -29,14 +29,14 @@ class Nodue(db.Model):
     id = db.Column(db.Integer, primary_key=True )
     user_id = db.Column(db.Integer, db.ForeignKey('user.enrollment_no'), unique=True, nullable=False)
     library = db.Column(db.String(10), nullable=False)
-    Hostel_fess = db.Column(db.String(10), nullable=False)
+    hostel_fess = db.Column(db.String(10), nullable=False)
     tuition_fee = db.Column(db.String(10), nullable=False)
     membership_fee = db.Column(db.String(10), nullable=False)
     other_fees = db.Column(db.String(10), nullable=False)
     miscellaneous = db.Column(db.String(10), nullable=False)
     exam = db.Column(db.String(10), nullable=False)
-    # Add the user relationship to the Nodue model
-    user = db.relationship('User', backref='nodue', uselist=False)
+    # Add the user relationship to the Nodue model for one-one mapping
+    # user = db.relationship('User', backref='nodue', uselist=False)
 
     def __repr__(self):
         return f"Nodue('{self.user_id}', '{self.library}', '{self.exam}', '{self.tuition_fee}', '{self.Hostel_fess}', '{self.membership_fee}', '{self.miscellaneous}', '{self.other_fees})"
