@@ -1,44 +1,56 @@
-from flask import Flask, render_template, request, redirect
-
-app = Flask(__name__)
-
-# Configuration (you can load it from an external config.py file)
-app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
+from flask import render_template, url_for, flash, redirect
+from nodues import app, db, bcrypt
+from nodues.forms import RegistrationForm, LoginForm
+from nodues.models import User
 
 
-# Define routes and views
-@app.route('/')
-def home():
-    # Fetch user details from the database (if applicable)
-    user_details = {
-        'name': 'John Doe',
-        'address': '123 Main St, City',
-        'mobile': '123-456-7890',
-        'enrollment_id': 'ABCDE123',
-        'course_name': 'Computer Science'
+due_records = [
+    {
+        'enrollment_no': '007',
+        'hostel_fees': 0,
+        'tuition_fees': 0,
+        'other_fees': 0,
+        'library': 100
+    },
+    {
+        'enrollment_no': '101',
+        'hostel_fees': 0,
+        'tuition_fees': 0,
+        'other_fees': 100,
+        'library': 0
     }
-    return render_template('home.html', user_details=user_details)
+]
 
+@app.route("/")
+@app.route("/home")
+def home():
+    return render_template('home.html', due_records=due_records, title='Dashboard')
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    # Handle login form submission and authentication logic
-    if request.method == 'POST':
-        # Process the login form data
-        # Check credentials, validate the user, and handle sessions
-        return redirect('/home')  # Redirect to the home page after successful login
-    return render_template('login.html')
+@app.route("/about")
+def about():
 
+    return render_template('about.html', title='About')
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route("/register", methods=['GET', 'POST'])
 def register():
-    # Handle registration form submission and user creation logic
-    if request.method == 'POST':
-        # Process the registration form data
-        # Save the new user details to the database
-        return redirect('/login')  # Redirect to the login page after successful registration
-    return render_template('register.html')
+    form = RegistrationForm()
+    if form.validate_on_submit(): 
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password, enrollment_no=form.enrollment_no.data, course=form.course.data, batch=form.batch.data, address=form.address.data)
+        db.session.add(user)
+        db.session.commit()
+        flash(f'Account created for {form.username.data}!', 'success')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        if form.email.data == 'admin@blog.com' and form.password.data == 'password':
+            flash('You have been logged in!', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Login Unsuccessful. Please check username and password', 'danger')
+    return render_template('login.html', title='Login', form=form)
