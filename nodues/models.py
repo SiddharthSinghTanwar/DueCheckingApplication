@@ -10,11 +10,18 @@ class User(db.Model):
     course = db.Column(db.String(20), nullable=False)
     batch = db.Column(db.String(4), nullable=False)
     address = db.Column(db.Text)
-    hostel_fees = db.Column(db.String(20), unique=True, nullable=False)
-    tuition_fees = db.Column(db.String(20), unique=True, nullable=False)
-    other_fees = db.Column(db.String(20), unique=True, nullable=False)
-    library = db.Column(db.String(20), unique=True, nullable=False)
-
+    dues = db.relationship('Dues', backref='user', uselist=False)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}', '{self.course}', '{self.batch}', '{self.address}')"
+        return f"User('{self.username}', '{self.email}', '{self.enrollment_no}', '{self.course}', '{self.batch}', '{self.address}')"
+
+class Dues(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    hostel_fees = db.Column(db.String(20), unique=True, nullable=True)
+    tuition_fees = db.Column(db.String(20), unique=True, nullable=True)
+    other_fees = db.Column(db.String(20), unique=True, nullable=True)
+    library = db.Column(db.String(20), unique=True, nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), unique=True, nullable=False)
+
+    def __repr__(self):
+        return f"User('{self.hostel}', '{self.tuition_fees}', '{self.other_fees}', '{self.library}', '{self.user_id}')"

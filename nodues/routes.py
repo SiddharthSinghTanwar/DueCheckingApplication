@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect
-from nodues import app
-from nodues.forms import UpdateLogin, LoginForm
+from nodues import app, db, bcrypt
+from nodues.forms import RegistrationForm, LoginForm
 from nodues.models import User
 
 
@@ -28,15 +28,20 @@ def home():
 
 @app.route("/about")
 def about():
+
     return render_template('about.html', title='About')
 
-@app.route("/updatelogin", methods=['GET', 'POST'])
-def updatelogin():
-    form = UpdateLogin()
-    if form.validate_on_submit():
-        flash(f'Account updated for {form.username.data}!', 'success')
-        return redirect(url_for('home'))
-    return render_template('updatelogin.html', title='Update Login', form=form)
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit(): 
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User(username=form.username.data, email=form.email.data, password=hashed_password, enrollment_no=form.enrollment_no.data, course=form.course.data, batch=form.batch.data, address=form.address.data)
+        db.session.add(user)
+        db.session.commit()
+        flash(f'Account created for {form.username.data}!', 'success')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)
 
 
 @app.route("/login", methods=['GET', 'POST'])
