@@ -1,0 +1,29 @@
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">Enrollment No</th>
+        <th scope="col">Username</th>
+        <th scope="col">Email</th>
+        <th scope="col">Course</th>
+        <th scope="col">Batch</th>
+        <th scope="col">Address</th>
+        <th scope="col">Payment Details</th>
+        <th scope="col">Placement Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in search_results %}
+        <tr>
+          <td>{{ user.enrollment_no }}</td>
+          <td>{{ user.username }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.course }}</td>
+          <td>{{ user.batch }}</td>
+          <td>{{ user.address }}</td>   
+          <td>{{ user.payment_details }}</td>       
+          <td>{{ user.placement }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
+  
