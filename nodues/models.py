@@ -1,6 +1,11 @@
-from nodues import db
+from nodues import db, login_manager
+from flask_login import UserMixin
 
-class User(db.Model):
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     enrollment_no = db.Column(db.String(10), unique=True, nullable=False)
     username = db.Column(db.String(20), unique=True, nullable=False)
@@ -10,18 +15,33 @@ class User(db.Model):
     course = db.Column(db.String(20), nullable=False)
     batch = db.Column(db.String(4), nullable=False)
     address = db.Column(db.Text)
-    dues = db.relationship('Dues', backref='user', uselist=False)
+    placement = db.Column(db.String(20), nullable=True)
+    payment_details = db.Column(db.String(20), nullable=False, default='default.jpg')
+    no_dues_applied = db.Column(db.Boolean, default=True)
+    dues_entries = db.relationship('DuesEntry', backref='user')
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.enrollment_no}', '{self.course}', '{self.batch}', '{self.address}')"
 
-class Dues(db.Model):
+class DuesEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    hostel_fees = db.Column(db.String(20), unique=True, nullable=True)
-    tuition_fees = db.Column(db.String(20), unique=True, nullable=True)
-    other_fees = db.Column(db.String(20), unique=True, nullable=True)
-    library = db.Column(db.String(20), unique=True, nullable=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), unique=True, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    faculty_id = db.Column(db.Integer, db.ForeignKey('faculty.id'), nullable=False)
+    hostel_fees = db.Column(db.String(20), nullable=True)
+    tuition_fees = db.Column(db.String(20), nullable=True)
+    other_fees = db.Column(db.String(20), nullable=True)
+    library = db.Column(db.String(20), nullable=True)
+    comments = db.Column(db.Text)
 
     def __repr__(self):
-        return f"User('{self.hostel}', '{self.tuition_fees}', '{self.other_fees}', '{self.library}', '{self.user_id}')"
+        return f"DuesEntry(user_id='{self.user_id}', faculty_id='{self.faculty_id}')"
+
+class Faculty(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), unique=True, nullable=False)
+    department = db.Column(db.String(20), unique=True, nullable=False)
+    
+    dues_entries = db.relationship('DuesEntry', backref='faculty')
+
+    def __repr__(self):
+        return f"Faculty(name='{self.name}', department='{self.department}')"

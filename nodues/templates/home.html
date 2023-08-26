@@ -1,16 +1,95 @@
-{% extends "layout.html" %}
-{% block content %}
-    {% for records in due_records %}
-        <!-- TODO: 1) An if conditional checking which enrollment_no to show the records for.
-        2) Implement an algorithm for faster search in database (database indexing)  -->
-        {% if records.enrollment_no == '007' %}
-            <h2>Your details</h2>
-            <p>Enrollment No: {{ records.enrollment_no }}</p>
-            <p>Hostel Fees: {{ records.hostel_fees }}</p>
-            <p>Tuition Fees: {{ records.tuition_fees }}</p>
-            <p>Other Fees: {{ records.other_fees }}</p>
-            <p>Library: {{ records.library }}</p>
-        {% endif %}
-    {% endfor %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{% endblock content %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+
+    {% if title %}
+        <title>No-Dues: {{ title }}</title>
+    {% else %}
+        <title>No-Dues: Portal</title>
+    {% endif %}
+  
+</head>
+<body style="background-image: url(../static/Spiraliitropar.jpg); background-size: cover; background-repeat: no-repeat; background-attachment: fixed;">
+    <!-- The naviagation bar -->
+    <header class="site-header">
+        <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+          <div class="container">
+            <a class="navbar-brand mr-4" href="/">No Dues and Alumini Network</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarToggle">
+              <div class="navbar-nav mr-auto">
+                <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+                <a class="nav-item nav-link" href="{{ url_for('about') }}">About</a>
+              </div>
+              <!-- Navbar Right Side -->
+              <div class="navbar-nav ml-auto">
+                <div class="dropdown">
+                  <button class="nav-link dropdown-toggle btn btn-link" type="button" id="loginDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Login
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="loginDropdownButton">
+                    <a class="dropdown-item" href="{{ url_for('student_login') }}">Student</a>
+                    <a class="dropdown-item" href="#">Alumini</a>
+                    <a class="dropdown-item" href="#">Faculty</a>
+                    <a class="dropdown-item" href="{{ url_for('admin') }}">Admin</a>
+                    <!-- Add more login types as needed -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </header>
+    
+      
+    <!-- Enclosing the content in a container and in a main shell snippet-->
+    <main role="main" class="container">
+      <div class="row">
+          <div class="col-md-8">
+              <div class="content-section">
+                  <!-- Latest Posts Container -->
+                  <h3>Latest Posts</h3>
+                  <ul class="list-group">
+                      <li class="list-group-item list-group-item-light">Post 1</li>
+                      <li class="list-group-item list-group-item-light">Post 2</li>
+                      <!-- Add more posts here -->
+                  </ul>
+              </div>
+          </div>
+          <div class="col-md-4">
+              <div class="content-section">
+                  <!-- Events Container -->
+                  <h3>Events</h3>
+                  <ul class="list-group">
+                      <li class="list-group-item list-group-item-light">Event 1</li>
+                      <li class="list-group-item list-group-item-light">Event 2</li>
+                      <!-- Add more events here -->
+                  </ul>
+              </div>
+              <div class="content-section mt-4">
+                  <!-- Job Postings Container -->
+                  <h3>Job Postings</h3>
+                  <ul class="list-group">
+                      <li class="list-group-item list-group-item-light">Job 1</li>
+                      <li class="list-group-item list-group-item-light">Job 2</li>
+                      <!-- Add more job postings here -->
+                  </ul>
+              </div>
+          </div>
+      </div>
+  </main>
+
+
+    <!-- Bootstrap Javascript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+</body>
+</html>
