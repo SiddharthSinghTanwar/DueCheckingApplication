@@ -23,9 +23,13 @@ class RegistrationForm(FlaskForm):
         if user:
             raise ValidationError('That username is taken. Please choose a different one.')
         
+    def validate_enrollment_no(self, enrollment_no):
+        user = User.query.filter_by(enrollment_no=enrollment_no.data).first()
+        if user:
+            raise ValidationError('That enrollment_no is taken. Please choose a different one.')
+        
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
-        
         if user:
             raise ValidationError('Email already taken.')
 
@@ -41,6 +45,21 @@ class AdminLogin(FlaskForm):
                         validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
+
+class FacultyLogin(FlaskForm):
+    name = StringField('Name',
+                        validators=[DataRequired(), Length(min=2, max=20)])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember = BooleanField('Remember Me')
+    submit = SubmitField('Login')
+
+class FacultyRegister(FlaskForm):
+    enrollment_no = StringField('Enrollment No',
+                        validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    name  = StringField('Name', validators=[DataRequired(), Length(min=2, max=20)])
+    department = StringField('Department', validators=[DataRequired()])
+    submit = SubmitField('Submit')
 
 class UpdateAccountForm(FlaskForm):
     username = StringField('Username',
@@ -67,4 +86,18 @@ class UpdateAccountForm(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError('Email already taken.')
+            
+class ChangePassword:
+    old_password = PasswordField('Old Password', validators=[DataRequired()])
+    new_password = PasswordField('New Password', validators=[DataRequired()])
+    submit = SubmitField('Update')
+
+    def validate_old_password(self, password):
+        user = User.query.filter_by(email=password.data).first()
+        if user:
+            raise ValidationError('Email already taken.')
+
+class ForgotForm:
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Submit')
 
