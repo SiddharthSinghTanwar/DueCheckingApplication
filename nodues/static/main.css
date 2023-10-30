@@ -2,60 +2,75 @@ body {
     background: #fafafa;
     color: #333333;
     margin-top: 5rem;
-  }
-  
-  h1, h2, h3, h4, h5, h6 {
-    color: #444444;
-  }
-  
-  .bg-steel {
-    background-color: #5f788a;
-  }
-  
-  .site-header .navbar-nav .nav-link {
-    color: #cbd5db;
-  }
-  
-  .site-header .navbar-nav .nav-link:hover {
-    color: #ffffff;
-  }
-  
-  .site-header .navbar-nav .nav-link.active {
-    font-weight: 500;
-  }
-  
-  .content-section {
-    background: #ffffff;
-    padding: 10px 20px;
-    border: 1px solid #dddddd;
-    border-radius: 3px;
-    margin-bottom: 20px;
-  }
-  
-  .account-img {
-    height: 125px;
-    width: 125px;
-    margin-right: 20px;
-    margin-bottom: 16px;
-  }
-  
-  .account-heading {
-    font-size: 2.5rem;
-  }
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* This makes the background fixed */
+    background-size: cover; /* This scales the background image to cover the entire body */
+}
 
-  .navbar-nav.ml-auto {
-    margin-left: auto; /* Pushes the right-side links to the right */
-  }
+h1, h2, h3, h4, h5, h6 {
+  color: #444444;
+}
 
-  .site-header .navbar-nav .nav-link {
+.bg-steel {
+  background-color: #5f788a;
+}
+
+.site-header .navbar-nav .nav-link {
+  color: #cbd5db;
+}
+
+.site-header .navbar-nav .nav-link:hover {
+  color: #ffffff;
+}
+
+.site-header .navbar-nav .nav-link.active {
+  font-weight: 500;
+}
+
+.content-section {
+  background: #ffffff;
+  padding: 10px 20px;
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+  margin-bottom: 20px;
+  margin-top: 80px;
+}
+
+.account-img {
+  height: 125px;
+  width: 125px;
+  margin-right: 20px;
+  margin-bottom: 16px;
+}
+
+.account-heading {
+  font-size: 2.5rem;
+}
+
+.navbar-nav.ml-auto {
+  margin-left: auto; /* Pushes the right-side links to the right */
+}
+.navbar.mt-5 {
+  margin-top: 5em; /* Adjust this value as needed */
+}
+.site-header .navbar-nav .nav-link {
     color: #cbd5db;
     margin-left: 10px; /* Adds spacing between navbar items */
-  }
+}
 
-  .site-header .navbar-nav .nav-link:hover {
+.site-header .navbar-nav .nav-link:hover {
     color: #ffffff;
-  }
+}
 
-  .site-header .navbar-nav .nav-link.active {
+.site-header .navbar-nav .nav-link.active {
     font-weight: 500;
   }
+.center-button {
+    text-align: center;
+    margin: 20px 0; /* Adjust the margin value to control the gap */
+}
+.contact-info {
+  font-size: 14px;
+  color: #888; /* Adjust the color to your preference */
+  margin-left: 120px; /* Add spacing between text and icons */
+}
