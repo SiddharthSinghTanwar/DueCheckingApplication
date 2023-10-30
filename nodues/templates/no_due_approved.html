@@ -29,9 +29,9 @@
           </div>
         </nav>
     </header>
-
+    <h2>No dues Approved</h2>
     <div class="center-button">
-        <button id="apply-for-no-dues-btn" {% if student.no_dues_applied %}disabled{% endif %}>Apply for No Dues</button>
+        <button id="apply-for-no-dues-btn" disabled>Apply for No Dues</button>
     </div>
 
     <div id="no-dues-status" {% if not student.no_dues_applied %} style="display: none;"{% endif %}>
@@ -40,34 +40,27 @@
             <thead class="thead-dark">
             <tr>
                 <th>Category</th>
-                <th>Amount</th>
-                
+                <th>Status/Amount</th>                
             </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>Hostel Fees</td>
-                    <td>{% if due_entry.hostel_fee_check != 'Applied' %}{{ due_entry.hostel_fees }}{% else %}Applied{% endif %}</td>
-                    
+                    <td>Approved</td>                    
                 </tr>
                 <tr>
                     <td>Tuition Fees</td>
-                    <td>{% if due_entry.tution_fee_check != 'Applied' %}{{ due_entry.tution_fees }}{% else %}Applied{% endif %}</td>
-                    
+                    <td>Approved</td>                    
                 </tr>
                 <tr>
                     <td>Library Fees</td>
-                    <td>{% if due_entry.library_check != 'Applied' %}{{ due_entry.library }}{% else %}Applied{% endif %}</td>
-                    
+                    <td>Approved</td>                    
                 </tr>
                 <tr>
                     <td>Other Fees</td>
-                    <td>{% if due_entry.other_fee_check != 'Applied' %}{{ due_entry.other_fees }}{% else %}Applied{% endif %}</td>
-                    
+                    <td>Approved</td>                    
                 </tr>
-                <!-- Add other dues fields as needed -->
-            </tbody>
-            
+            </tbody>            
         </table>
     </div>
     
@@ -76,41 +69,11 @@
             <label for="paymentFile">Upload Receipt (PDF):</label>
             <input type="file" class="form-control-file" name="paymentFile" id="paymentFile" accept=".pdf">
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary" disabled>Submit</button>
     </form>
     
     
-    <script>
-        // JavaScript code
-        document.getElementById('apply-for-no-dues-btn').addEventListener('click', function() {
-            // Make an AJAX POST request to a Flask route
-            fetch('/apply_for_no_dues', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    // Include any data needed for the backend
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Handle the response data, which may include dues information
-                if (data.success) {
-                    // Display the dues table
-                    document.getElementById('no-dues-status').style.display = 'block';
-                    document.getElementById('apply-for-no-dues-btn').disabled = true; // Disable the button
-                } else {
-                    // Handle any errors or display a message
-                    alert('Error applying for no dues: ' + data.message);
-                }
-            })
-            .catch(error => {
-                // Handle errors
-                alert('An error occurred: ' + error);
-            });
-        });
-    </script>
+   
 </script>
 <!-- Bootstrap Javascript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
