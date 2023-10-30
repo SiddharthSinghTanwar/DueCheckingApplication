@@ -1,10 +1,11 @@
 import os
 import secrets
+from io import BytesIO
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, send_file
 from nodues import app, db, bcrypt
 from nodues.forms import RegistrationForm, LoginForm, UpdateAccountForm, AdminLogin, FacultyLogin, ForgotForm, ChangePassword, FacultyRegister
-from nodues.models import User, DuesEntry
+from nodues.models import User, DuesEntry, Receipt
 from flask_login import login_user, current_user, logout_user, login_required
 import pandas as pd
 import random
@@ -107,6 +108,7 @@ def register():
         else:
             if 'csvFile' not in request.files:
                 flash('No file part', 'danger')
+                return redirect(url_for('register'))
 
             csv_file = request.files['csvFile']
 
@@ -164,7 +166,7 @@ def admin_home():
     users = User.query.filter_by(no_dues_applied=True).all()
     return render_template('admin_home.html', title='Admin-Home',users=users)
 
-@app.route('/download_payment_details/<int:user_id>', methods=['GET'])
+@app.route('/download_payment_details/<user_id>', methods=['GET'])
 # @login_required  # Add admin role check here
 def download_payment_details(user_id):
     # Check if the logged-in user has admin privileges (role-based access control).
@@ -172,15 +174,16 @@ def download_payment_details(user_id):
     #     flash('You do not have permission to access this page.', 'danger')
     #     return redirect(url_for('index'))
 
-    user = User.query.get(user_id)
-    payment_details_path = user.payment_details
+    file = Receipt.query.filter_by(user_id=user_id).first()
+    return send_file(BytesIO(file.data), download_name=file.filename, as_attachment=True )
+    # payment_details_path = user.payment_details
 
-    # Check if the file exists before trying to send it.
-    if os.path.isfile(payment_details_path):
-        return send_file(payment_details_path, as_attachment=True)
-    else:
-        flash('Payment details not found for this user.', 'danger')
-        return redirect(url_for('admin_home'))
+    # # Check if the file exists before trying to send it.
+    # if os.path.isfile(payment_details_path):
+    #     return send_file(payment_details_path, as_attachment=True)
+    # else:
+    #     flash('Payment details not found for this user.', 'danger')
+    #     return redirect(url_for('admin_home'))
 
 @app.route('/approve_users', methods=['POST'])
 # @login_required  # Add admin role check here
@@ -191,7 +194,8 @@ def approve_users():
     try:
         for user_id in user_ids:
             user = User.query.get(user_id)
-            user.status = 'Approved'
+            user.status = True
+            user.no_dues_applied = False
             db.session.commit()
 
         return jsonify({'success': True})
@@ -219,6 +223,8 @@ def student_login():
 def student_home():
     # Retrieve the current user
     student = current_user  # Assuming you have a way to get the current user
+    if student.status:
+        return render_template('no_due_approved.html', student=student)
     due_entry = DuesEntry.query.filter_by(user_id=student.id).first()
 
      # Get the uploaded file
@@ -227,21 +233,16 @@ def student_home():
             
         if uploaded_file:
             # Process the file
-            filename = uploaded_file.filename  # Secure the filename
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)  # Define the file path
-            uploaded_file.save(file_path)  # Save the file
-
+            filename = uploaded_file.filename
+            upload = Receipt(user_id=student.id, filename=filename, data=uploaded_file.read())
+            db.session.add(upload)
+        
             # Update the user's payment_details with the file path or filename
             current_user.payment_details = filename  # Update the payment_details field in the database
 
             db.session.commit()  # Commit the changes
 
             flash('Receipt uploaded successfully', 'success')
-            return redirect(url_for('student_home'))
-
-        else:
-            flash('No file uploaded', 'warning')
-
     
     return render_template('student_home.html', student=student, due_entry=due_entry)
 
