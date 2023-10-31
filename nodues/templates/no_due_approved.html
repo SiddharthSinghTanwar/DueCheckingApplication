@@ -29,13 +29,15 @@
           </div>
         </nav>
     </header>
-    <h2>No dues Approved</h2>
+    <div class="container">
+        <p><b>Status: </b><strong>No Dues Approved</strong> </p>
+    </div>
     <div class="center-button">
         <button id="apply-for-no-dues-btn" disabled>Apply for No Dues</button>
     </div>
 
-    <div id="no-dues-status" {% if not student.no_dues_applied %} style="display: none;"{% endif %}>
-        <!-- This div will contain the status table (hidden by default) -->
+    <!-- <div id="no-dues-status" {% if not student.no_dues_applied %} style="display: none;"{% endif %}>
+        
         <table class="table table-bordered table-striped>
             <thead class="thead-dark">
             <tr>
@@ -72,7 +74,7 @@
         <button type="submit" class="btn btn-primary" disabled>Submit</button>
     </form>
     
-    
+     -->
    
 </script>
 <!-- Bootstrap Javascript -->

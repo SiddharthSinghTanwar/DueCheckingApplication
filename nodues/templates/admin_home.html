@@ -26,7 +26,6 @@
             <div class="collapse navbar-collapse" id="navbarToggle">
               <div class="navbar-nav mr-auto">
                 <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
-                <a class="nav-item nav-link" href="{{ url_for('upload') }}">Approve</a>
               </div>
               <!-- Navbar Right Side -->
               <div class="navbar-nav ml-auto">
@@ -86,7 +85,7 @@
         </div>
       </main>
 
-      <table class="table table-bordered">
+      <table class="table table-bordered container">
         <thead class="thead-dark">
             <tr>
                 <th>Username</th>
@@ -118,7 +117,9 @@
             {% endfor %}
         </tbody>
     </table>
-    <button onclick="approveSelectedUsers()">Approve Selected</button>
+    <div class="center-button">
+        <button  onclick="approveSelectedUsers()">Approve Selected</button>
+    </div>
 
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
       <script>
