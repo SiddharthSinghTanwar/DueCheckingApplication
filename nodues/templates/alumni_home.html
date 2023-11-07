@@ -34,52 +34,33 @@
       </nav>
     <!-- The naviagation bar -->
         <nav class="navbar navbar-expand-md navbar-dark bg-steel">
-          <div class="container">
-            <a class="navbar-brand" href="/">No Dues and Alumini Network</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarToggle">
-              <div class="navbar-nav mr-auto">
-                <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
-                <a class="nav-item nav-link" href="{{ url_for('about') }}">About</a>
-              </div>
-              <!-- Navbar Right Side -->
-              <div class="navbar-nav ml-auto">
-                {% if current_user.is_authenticated %}
-                  <a class="nav-item nav-link" href="{{ url_for('student_home') }}">Dashboard</a>
-                  <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
-                {% else %}
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Login
-                    </a>
-                    <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="{{ url_for('student_login') }}">Student</a></li>
-                      <li><a class="dropdown-item" href="{{ url_for('faculty_login') }}">Faculty</a></li>
-                      <li><a class="dropdown-item" href="{{ url_for('alumni_login') }}">Alumni</a></li>
-                      <li><a class="dropdown-item" href="{{ url_for('admin') }}">Admin</a></li>
-                    </ul>
-                  </li>
-                  {% endif %}
-              </ul>
+            <div class="container">
+                <a class="navbar-brand" href="/">No Dues and Alumini Network</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarToggle">
+                    <div class="navbar-nav mr-auto">
+                        <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+                        <a class="nav-item nav-link" href="{{ url_for('about') }}">About</a>
+                    </div>
+                </div>
             </div>
-          </div>
-          </div>
         </nav>
         </header>
     
     <!-- Enclosing the content in a container and in a main shell snippet-->
     <main role="main" class="container">
+      <!-- <div class="container-fluid">
+        <img src="../static/Spiraliitropar.jpg">
+      </div> -->
+
       <div class="row" margin-top="80px">
           <div class="col-md-8">
               <div class="content-section" style="background-color: rosybrown;">
                   <!-- Latest Posts Container -->
                   <h3 style="color: navajowhite;">News and Updates</h3>
                   <ul class="list-group">
-                    {% for update in updates %}
-                        <li class="list-group-item list-group-item-light">{{ update.content }}</li>
-                    {% endfor %}
                       <li class="list-group-item list-group-item-light">Job Fair: At Cricket Ground on 12 Nov, starts 11am</li>
                       <li class="list-group-item list-group-item-light">Register for Semester Exams with your department coordinator</li>
                       <!-- Add more posts here -->
@@ -91,9 +72,6 @@
                   <!-- Events Container -->
                   <h3 style="color: navajowhite;">Events</h3>
                   <ul class="list-group">
-                    {% for entry in events %}
-                        <li class="list-group-item list-group-item-light">{{ entry.content }}</li>
-                    {% endfor %}
                       <li class="list-group-item list-group-item-light">31st Nov: Farewell Dinner Party</li>
                       <li class="list-group-item list-group-item-light">14th Nov: Meetup with Director</li>
                       <!-- Add more events here -->
@@ -103,9 +81,6 @@
                   <!-- Job Postings Container -->
                   <h3 style="color: navajowhite;">Job Postings</h3>
                   <ul class="list-group">
-                    {% for entry in jobs %}
-                        <li class="list-group-item list-group-item-light">{{ entry.content }}</li>
-                    {% endfor %}
                       <li class="list-group-item list-group-item-light">Full Time: Research Engineer, Company: PlusAI <a href="https://www.indeed.com/cmp/Plusai?from=mobviewjob&tk=1he13f91vkmct801&fromjk=2901d3dac71158ea&attributionid=mobvjcmp">Apply</a></li>
                       <li class="list-group-item list-group-item-light">Full Time: Service Engineer, Company: Microsoft <a href="https://www.indeed.com/cmp/Microsoft?from=mobviewjob&tk=1he13bkkg2j49000&fromjk=4e95638588f27a38&attributionid=mobvjcmp">Apply</a></li>
                       <!-- Add more job postings here -->

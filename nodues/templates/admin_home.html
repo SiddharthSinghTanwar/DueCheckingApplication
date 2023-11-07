@@ -26,6 +26,7 @@
             <div class="collapse navbar-collapse" id="navbarToggle">
               <div class="navbar-nav mr-auto">
                 <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
+                <a class="nav-item nav-link" href="{{ url_for('posts') }}">Add Post</a>
               </div>
               <!-- Navbar Right Side -->
               <div class="navbar-nav ml-auto">
@@ -36,6 +37,7 @@
                   <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="{{ url_for('register') }}">Student</a></li>
                     <li><a class="dropdown-item" href="{{ url_for('register_faculty') }}">Faculty</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('register_alumni') }}">Alumni</a></li>
                   </ul>
                 </li>
                 <a class="nav-item nav-link" href="#">Change Password</a>
