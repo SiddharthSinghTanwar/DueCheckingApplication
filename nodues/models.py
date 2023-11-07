@@ -50,19 +50,18 @@ class Receipt(db.Model):
     data = db.Column(db.LargeBinary)
     # Add other fields as needed, e.g., upload date, description, etc.
 
-class Alumini(db.Model):
+class Alumni(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
+    course = db.Column(db.String(20), nullable=False)
+    address = db.Column(db.String(60), nullable=False)
+    organization = db.Column(db.String(60), nullable=False)
+
+class Notices(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    type = db.Column(db.String(20))
+    content = db.Column(db.String(120))
 
 
-# class Faculty(db.Model, UserMixin):
-#     id = db.Column(db.Integer, primary_key=True)
-#     email = db.Column(db.String(20), unique=True, nullable=False)
-#     name = db.Column(db.String(120), unique=True, nullable=False)
-#     department = db.Column(db.String(20), unique=True, nullable=False)
-#     password = db.Column(db.String(60), nullable=False)
-#     dues_entries = db.relationship('DuesEntry', backref='faculty')
-
-#     def __repr__(self):
-#         return f"Faculty(name='{self.name}', department='{self.department}')"

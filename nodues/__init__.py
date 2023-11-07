@@ -25,5 +25,3 @@ login_manager.login_message_category = 'info'
 
 
 from nodues import routes
-
-# ndwp zpee fjmz mpjk 

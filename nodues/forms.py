@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileAllowed, FileField
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from nodues.models import User
 
@@ -61,6 +61,21 @@ class FacultyRegister(FlaskForm):
     department = StringField('Department', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
+class AlumniLogin(FlaskForm):
+    name = StringField('Name',
+                        validators=[DataRequired(), Length(min=2, max=20)])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember = BooleanField('Remember Me')
+    submit = SubmitField('Login')
+
+class AlumniRegister(FlaskForm):
+    name  = StringField('Name', validators=[DataRequired(), Length(min=2, max=20)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    course = StringField('Course', validators=[DataRequired()])
+    address = StringField('Address', validators=[DataRequired()])
+    organization = StringField('Organization', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
 class UpdateAccountForm(FlaskForm):
     username = StringField('Username',
                            validators=[DataRequired(), Length(min=2, max=20)])
@@ -87,7 +102,7 @@ class UpdateAccountForm(FlaskForm):
             if user:
                 raise ValidationError('Email already taken.')
             
-class ChangePassword:
+class ChangePassword(FlaskForm):
     old_password = PasswordField('Old Password', validators=[DataRequired()])
     new_password = PasswordField('New Password', validators=[DataRequired()])
     submit = SubmitField('Update')
@@ -97,7 +112,12 @@ class ChangePassword:
         if user:
             raise ValidationError('Email already taken.')
 
-class ForgotForm:
+class ForgotForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Submit')
+
+class Posts(FlaskForm):
+    type = SelectField('Type', choices=[('update', 'Update'), ('event', 'Event'), ('job', 'Job Posting')], validators=[DataRequired()])
+    content = StringField('Content', validators=[DataRequired()])
     submit = SubmitField('Submit')
 

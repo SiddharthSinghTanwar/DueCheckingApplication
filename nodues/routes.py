@@ -4,8 +4,8 @@ from io import BytesIO
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, send_file
 from nodues import app, db, bcrypt
-from nodues.forms import RegistrationForm, LoginForm, UpdateAccountForm, AdminLogin, FacultyLogin, ForgotForm, ChangePassword, FacultyRegister
-from nodues.models import User, DuesEntry, Receipt
+from nodues.forms import RegistrationForm, LoginForm, UpdateAccountForm, AdminLogin, FacultyLogin, ForgotForm, ChangePassword, FacultyRegister, AlumniLogin, AlumniRegister, Posts
+from nodues.models import User, DuesEntry, Receipt, Alumni, Notices
 from flask_login import login_user, current_user, logout_user, login_required
 import pandas as pd
 import random
@@ -21,6 +21,7 @@ email_sender = 'noduesproject05@gmail.com'
 email_password = 'ndwpzpeefjmzmpjk'
 context = ssl.create_default_context()
 
+# notices = {'updates': [], 'events': [], 'jobs': []}
 
 def generate_random_password(length=10):
     characters = string.ascii_letters + string.digits
@@ -30,7 +31,10 @@ def generate_random_password(length=10):
 @app.route("/", methods=['GET','POST'])
 @app.route("/home", methods=['GET','POST'])
 def home():
-    return render_template('home.html')
+    updates = Notices.query.filter_by(type='update').all()
+    jobs = Notices.query.filter_by(type='job').all()
+    events = Notices.query.filter_by(type='event').all()
+    return render_template('home.html', updates=updates, jobs=jobs, events=events)
 
 # Route to handle the search form submission
 @app.route('/search_results', methods=['POST'])
@@ -165,6 +169,31 @@ def admin_home():
     # Query users who have applied for no dues
     users = User.query.filter_by(no_dues_applied=True).all()
     return render_template('admin_home.html', title='Admin-Home',users=users)
+
+@app.route("/posts", methods=['GET', 'POST'])
+def posts():
+    form = Posts()
+    if form.validate_on_submit():
+        if request.method == 'POST':
+            # Get data from the form
+            post_type = form.type.data
+            content = form.content.data
+
+            # Create a new post
+            new_post = Notices(type=post_type, content=content)
+
+            try:
+                # Add the new post to the database
+                db.session.add(new_post)
+                db.session.commit()
+
+                flash('Post created successfully', 'success')
+            except Exception as e:
+                flash('An error occurred while creating the post', 'danger')
+
+            # Redirect to a page that displays posts, or customize as needed
+            return redirect(url_for('posts'))
+    return render_template('posts.html', form=form)
 
 @app.route('/download_payment_details/<user_id>', methods=['GET'])
 # @login_required  # Add admin role check here
@@ -455,9 +484,53 @@ def approve_dues(user_id, dept):
     return redirect(url_for('faculty_home'))
 
 
-@app.route("/alumini_login")
-def alumini_login():
-    return render_template('alumini_home.html')
+@app.route("/alumni_home")
+def alumni_home():
+    return render_template('alumni_home.html')
+
+@app.route("/alumni_login", methods=['GET', 'POST'])
+def alumni_login():
+    form = AlumniLogin()
+    # if request.method == 'POST':
+    if form.validate_on_submit():
+        alum = Alumni.query.filter_by(username=form.name.data).first()
+        if alum and bcrypt.check_password_hash(alum.password, form.password.data):
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('alumni_home'))
+        else:
+            flash('Login Unsuccessful. Please check email and password', 'danger')
+    return render_template('alumni_login.html', title='Alumni Login', form=form)
+
+@app.route("/register_alumni", methods=['GET', 'POST'])
+def register_alumni():
+    form = AlumniRegister()
+    print(form.errors)
+    if request.method == "POST":
+        if form.validate_on_submit():
+            # Generate a random password
+            random_password = generate_random_password()
+
+            hashed_password = bcrypt.generate_password_hash(random_password).decode('utf-8')
+            alumni = Alumni(username=form.name.data, email=form.email.data, password=hashed_password, course=form.course.data, address=form.address.data, organization=form.organization.data)
+            db.session.add(alumni)
+            db.session.commit()
+            
+            em = EmailMessage()
+            em['From'] = email_sender
+            # Send the random password to the user's email
+            email_receiver = form.email.data
+            em['To'] = email_receiver
+            em['Subject'] = 'Registration details'
+            body= f"Hello {form.name.data},\n\nYour registration is successful!\n\nYour password is: {random_password}\n\nYou can now log in with this password and change it later."
+            em.set_content(body)
+            
+            with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as smtp:
+                smtp.login(email_sender, email_password)
+                smtp.sendmail(email_sender, email_receiver, em.as_string())
+
+            flash(f'Account created for {form.name.data}! Please check your email for the password.', 'success')
+            return redirect(url_for('admin_home'))
+    return render_template('register_alumni.html', form=form)
 
 @app.route("/error_page")
 def error_page():
