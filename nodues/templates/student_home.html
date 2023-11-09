@@ -70,14 +70,16 @@
             
         </table>
     </div>
+    <div class="container">
+        <form method="POST" enctype="multipart/form-data" action="">
+            <div class="form-group">
+                <label for="paymentFile">Upload Receipt (PDF):</label>
+                <input type="file" class="form-control-file" name="paymentFile" id="paymentFile" accept=".pdf">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
     
-    <form method="POST" enctype="multipart/form-data" action="">
-        <div class="form-group">
-            <label for="paymentFile">Upload Receipt (PDF):</label>
-            <input type="file" class="form-control-file" name="paymentFile" id="paymentFile" accept=".pdf">
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
     
     
     <script>

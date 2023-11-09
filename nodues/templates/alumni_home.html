@@ -51,16 +51,15 @@
     
     <!-- Enclosing the content in a container and in a main shell snippet-->
     <main role="main" class="container">
-      <!-- <div class="container-fluid">
-        <img src="../static/Spiraliitropar.jpg">
-      </div> -->
-
       <div class="row" margin-top="80px">
           <div class="col-md-8">
               <div class="content-section" style="background-color: rosybrown;">
                   <!-- Latest Posts Container -->
                   <h3 style="color: navajowhite;">News and Updates</h3>
                   <ul class="list-group">
+                    {% for update in updates %}
+                        <li class="list-group-item list-group-item-light">{{ update.content }}</li>
+                    {% endfor %}
                       <li class="list-group-item list-group-item-light">Job Fair: At Cricket Ground on 12 Nov, starts 11am</li>
                       <li class="list-group-item list-group-item-light">Register for Semester Exams with your department coordinator</li>
                       <!-- Add more posts here -->
@@ -72,6 +71,9 @@
                   <!-- Events Container -->
                   <h3 style="color: navajowhite;">Events</h3>
                   <ul class="list-group">
+                    {% for entry in events %}
+                        <li class="list-group-item list-group-item-light">{{ entry.content }}</li>
+                    {% endfor %}
                       <li class="list-group-item list-group-item-light">31st Nov: Farewell Dinner Party</li>
                       <li class="list-group-item list-group-item-light">14th Nov: Meetup with Director</li>
                       <!-- Add more events here -->
@@ -81,6 +83,9 @@
                   <!-- Job Postings Container -->
                   <h3 style="color: navajowhite;">Job Postings</h3>
                   <ul class="list-group">
+                    {% for entry in jobs %}
+                        <li class="list-group-item list-group-item-light">{{ entry.content }}</li>
+                    {% endfor %}
                       <li class="list-group-item list-group-item-light">Full Time: Research Engineer, Company: PlusAI <a href="https://www.indeed.com/cmp/Plusai?from=mobviewjob&tk=1he13f91vkmct801&fromjk=2901d3dac71158ea&attributionid=mobvjcmp">Apply</a></li>
                       <li class="list-group-item list-group-item-light">Full Time: Service Engineer, Company: Microsoft <a href="https://www.indeed.com/cmp/Microsoft?from=mobviewjob&tk=1he13bkkg2j49000&fromjk=4e95638588f27a38&attributionid=mobvjcmp">Apply</a></li>
                       <!-- Add more job postings here -->

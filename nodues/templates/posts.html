@@ -49,9 +49,10 @@
               
               <div class="content-section" style="margin-top: 40px;">
                 <form method="POST" action="">
+                  {{ form.hidden_tag() }}
+                    {{ form.csrf_token }}
                     <fieldset class="form-group">
-                        <legend class="border-bottom mb-4">Add Post</legend>
-                        
+                        <legend class="border-bottom mb-4">Add Post</legend>                        
                         <div class="form-group">
                           {{ form.type.label(class="form-control-label") }}
                           {% if form.type.errors %}
