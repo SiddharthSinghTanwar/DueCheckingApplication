@@ -192,7 +192,7 @@ def posts():
                 flash('An error occurred while creating the post', 'danger')
 
             # Redirect to a page that displays posts, or customize as needed
-            return redirect(url_for('posts'))
+            return redirect(url_for('admin_home'))
     return render_template('posts.html', form=form)
 
 @app.route('/download_payment_details/<user_id>', methods=['GET'])
